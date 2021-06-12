@@ -34,21 +34,22 @@ redPalette n = [(50+i*6,0,0) | i <- [0..n]]
 bluePalette :: Int -> [(Int,Int,Int)]
 bluePalette n = [(0,0,50+i*6) | i <- [0..n] ]
 
+greenRedPalette :: Int -> [(Int,Int,Int)] 
+greenRedPalette n = [(50+n-i*6,50+i*6,0) | i <- [0..n]]
+
 -- Paleta com n valores retirados de uma lista com sequências de R, G e B 
 -- O '$' é uma facilidade sintática que substitui parênteses
 -- O cycle é uma função bacana -- procure saber mais sobre ela :-)
 rgbPalette :: Int -> [(Int,Int,Int)]
-rgbPalette n = take n $ cycle [([(50+i*6,0,0) | i <- [0..n]]),([(0,50+i*6,0) | i <- [0..n] ]),([(0,0,50+i*6) | i <- [0..n] ])]
-
-
-
+x = redPalette 15 ++  greenPalette 15 ++ bluePalette 15
+rgbPalette n = take n $ cycle x
 -------------------------------------------------------------------------------
 -- Geração de retângulos em suas posições
 -------------------------------------------------------------------------------
 
 genRectsInMinhoquinha :: Int -> [Rect]
 genRectsInMinhoquinha n  = [((m*(w+gap), 0.0), w, h + gap * cos (m*(1/6 * pi))) | m <- [0..fromIntegral (n-1)]]
-  where (w,h) = (10,10)
+  where (w,h) = (25,25)
         gap = 10
 
 -------------------------------------------------------------------------------
@@ -89,6 +90,6 @@ main = do
   where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
         svgfigs = svgElements svgRect rects (map svgStyle palette)
         rects = genRectsInMinhoquinha nrects
-        palette = rgbPalette nrects
+        palette = rgbPalette nrects 
         nrects = 50
         (w,h) = (1500,500) -- width,height da imagem SVG
